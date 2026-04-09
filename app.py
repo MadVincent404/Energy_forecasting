@@ -38,7 +38,7 @@ def main():
 
         X_data['Date'] = pd.to_datetime(X_data['Date'])
         
-        # 3. On met la date en Index (XGBoost ne la verra plus)
+        # On met la date en Index (XGBoost ne la verra plus)
         X_data = X_data.set_index('Date').sort_index()
         
         cible = 'Pic journalier consommation (MW)'
