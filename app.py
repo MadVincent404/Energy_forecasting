@@ -33,7 +33,7 @@ def main():
         return # Pylance comprend que le script s'arrête ici en cas d'erreur
 
     try:
-        test_file_path = Path(r"train_data\test.csv")
+        test_file_path = Path("train_data/test.csv")
         X_data = pd.read_csv(test_file_path, sep=",")
 
         X_data['Date'] = pd.to_datetime(X_data['Date'])
