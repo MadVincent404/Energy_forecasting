@@ -1,0 +1,22 @@
+artifact_path: file:///C:/Users/PC/Desktop/Projets/energies/mlruns/1/models/m-24251895c66945d29507295cd544f9f7/artifacts
+flavors:
+  python_function:
+    data: model.ubj
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.xgboost
+    python_version: 3.11.9
+  xgboost:
+    code: null
+    data: model.ubj
+    model_class: xgboost.sklearn.XGBRegressor
+    model_format: ubj
+    xgb_version: 3.2.0
+mlflow_version: 3.11.1
+model_id: m-24251895c66945d29507295cd544f9f7
+model_size_bytes: 1282191
+model_uuid: m-24251895c66945d29507295cd544f9f7
+prompts: null
+run_id: d31603bfbabd49cd9facdaac751d4d87
+utc_time_created: '2026-04-09 20:37:24.401812'

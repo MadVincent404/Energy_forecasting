@@ -1,0 +1,55 @@
+# params.yaml
+preprocessing:
+  file_path: data/pic-journalier-consommation-brute.csv
+  train_name: train_data/train.csv
+  test_name: train_data/test.csv
+  lags_jours: [1, 2, 3, 4, 5, 7, 9, 11, 13, 14]
+  fenetre_moyenne_mobile: [3, 7, 14]
+  
+xgboost_training:
+  objective: reg:squarederror
+  tree_method: hist
+  device: cuda
+  early_stopping_rounds: 50
+  n_estimators: 2000 #
+
+  search_space:
+    learning_rate:
+      min: 0.005
+      max: 0.1
+    max_depth:
+      min: 3
+      max: 12
+    subsample:
+      min: 0.5
+      max: 1.0
+    colsample_bytree:
+      min: 0.5
+      max: 1.0
+    min_child_weight:
+      min: 1
+      max: 10
+
+lightgbm_training:
+  objective: regression
+  n_estimators: 2000 
+  
+  search_space:
+    learning_rate:
+      min: 0.005
+      max: 0.1
+    num_leaves:
+      min: 20
+      max: 150
+    max_depth:
+      min: 3
+      max: 12
+    subsample:
+      min: 0.5
+      max: 1.0
+    colsample_bytree:
+      min: 0.5
+      max: 1.0
+    min_child_samples:
+      min: 10
+      max: 100

@@ -1,0 +1,8 @@
+numpy
+pandas
+matplotlib
+xgboost
+lightgbm
+mlflow
+optuna
+airflow
