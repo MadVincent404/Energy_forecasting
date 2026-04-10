@@ -25,4 +25,4 @@ jobs:
           sudo apt-get install -y chromium-chromedriver
 
       - name: Run ping script
-        run: ping_streamlit.py
+        run: python ping_streamlit.py
