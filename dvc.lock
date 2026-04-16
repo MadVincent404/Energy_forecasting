@@ -1,0 +1,86 @@
+schema: '2.0'
+stages:
+  fetch_data:
+    cmd: python fetch_api.py
+    deps:
+    - path: fetch_api.py
+      hash: md5
+      md5: 65b4c289ba3d713a3b2dcf9db5abb82b
+      size: 2444
+    outs:
+    - path: data/pic-journalier-consommation-brute.csv
+      hash: md5
+      md5: c5f8ba2f9c0aa7affabb98a39c0d17f6
+      size: 151382
+  process_data:
+    cmd: python process_data.py
+    deps:
+    - path: data/pic-journalier-consommation-brute.csv
+      hash: md5
+      md5: c5f8ba2f9c0aa7affabb98a39c0d17f6
+      size: 151382
+    - path: process_data.py
+      hash: md5
+      md5: 3a41b5d6a9d7a2df47de1225afaa9ecb
+      size: 2652
+    params:
+      params.yaml:
+        preprocessing.fenetre_moyenne_mobile:
+        - 3
+        - 7
+        - 14
+        preprocessing.lags_jours:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 7
+        - 9
+        - 11
+        - 13
+        - 14
+    outs:
+    - path: train_data/test.csv
+      hash: md5
+      md5: 79b14de033b61f8ff0ebf9dd9c81e1de
+      size: 25230
+    - path: train_data/train.csv
+      hash: md5
+      md5: 1b6541742d7f11ed81974c2c19fcc9f0
+      size: 1404395
+  train_lgbm:
+    cmd: python train_lightgbm.py
+    deps:
+    - path: train_data/train.csv
+      hash: md5
+      md5: 1b6541742d7f11ed81974c2c19fcc9f0
+      size: 1404395
+    - path: train_lightgbm.py
+      hash: md5
+      md5: 5bac57f3f4449c2f1e0a48fd2e426c30
+      size: 4933
+    params:
+      params.yaml:
+        lightgbm_training:
+          objective: regression
+          n_estimators: 2000
+          search_space:
+            learning_rate:
+              min: 0.005
+              max: 0.1
+            num_leaves:
+              min: 20
+              max: 150
+            max_depth:
+              min: 3
+              max: 12
+            subsample:
+              min: 0.5
+              max: 1.0
+            colsample_bytree:
+              min: 0.5
+              max: 1.0
+            min_child_samples:
+              min: 10
+              max: 100
