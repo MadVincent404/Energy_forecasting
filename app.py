@@ -95,12 +95,6 @@ def main():
         st.error(f"Erreur de chargement des données : {e}")
         return
     
-    base_dir = Path(__file__).parent
-    with open(base_dir / "params.yaml", "r") as f:
-        config = yaml.safe_load(f)
-
-    testfilepath = base_dir / config["preprocessing"]["test_name"]
-
     try:
         with st.spinner('Chargement des modèles depuis MLflow...'):
             model_xgb, model_lgbm, explainer_xgb, explainer_lgbm = load_models_and_explainers()
@@ -108,26 +102,17 @@ def main():
         st.error(f"Erreur de chargement des modèles : {e}")
         return # Pylance comprend que le script s'arrête ici en cas d'erreur
 
-    try:
-        test_file_path = Path("train_data/test.csv")
-        X_data = pd.read_csv(test_file_path, sep=",")
+    # Les données viennent déjà de load_test_data() (via l'API + feature engineering)
+    X_data['date'] = pd.to_datetime(X_data['date'])
+    X_data = X_data.set_index('date').sort_index()
 
-        X_data['date'] = pd.to_datetime(X_data['date'])
-        
-        # On met la date en Index (XGBoost ne la verra plus)
-        X_data = X_data.set_index('date').sort_index()
-        
-        cible = 'Pic journalier consommation (MW)'
-        
-        # On sauvegarde les vraies valeurs pour le graphique
-        y_true = X_data[cible] 
-        
-        # On supprime la colonne pour que XGBoost ait exactement les 48 colonnes attendues
-        X_data = X_data.drop(columns=[cible])
+    cible = 'pic_journalier_consommation'
 
-    except FileNotFoundError as e:
-        st.error(f"Erreur de chargement du CSV : {e}")
-        return
+    # On sauvegarde les vraies valeurs pour le graphique
+    y_true = X_data[cible]
+
+    # On supprime la colonne cible pour que les modèles aient les features attendues
+    X_data = X_data.drop(columns=[cible])
 
 
     st.subheader("Historique des prédictions sur 90 jours")
