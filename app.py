@@ -45,8 +45,8 @@ def load_test_data():
 
     perform_feature_engineering(
         file_path=str(tmp_raw),
-        trainname=str(tmp_train),
-        testname=str(tmp_test),
+        train_name=str(tmp_train),
+        test_name=str(tmp_test),
         lags=lags,
         windows=windows
     )
