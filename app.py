@@ -56,6 +56,17 @@ def main():
 
     st.subheader("Historique des Prédictions sur 90 jours")
 
+    model_features = model_xgb.get_booster().feature_names
+    data_features = list(X_data.columns)
+
+    missing_in_data  = set(model_features) - set(data_features)
+    extra_in_data    = set(data_features) - set(model_features)
+
+    st.write("Features manquantes dans X_data :", missing_in_data)
+    st.write("Features en trop dans X_data :", extra_in_data)
+    st.write("Ordre modèle :", model_features)
+    st.write("Ordre data :", data_features)
+
     preds_xgb_90 = model_xgb.predict(X_data)
     preds_lgbm_90 = model_lgbm.predict(X_data)
 
