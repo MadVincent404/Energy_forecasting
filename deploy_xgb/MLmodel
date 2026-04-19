@@ -1,4 +1,4 @@
-artifact_path: file:///C:/Users/PC/Desktop/Projets/energies/mlruns/1/models/m-24251895c66945d29507295cd544f9f7/artifacts
+artifact_path: file:///C:/Users/PC/Desktop/Projets/energies/mlruns/2/models/m-12e512e1830549fd9bf86574e9de3e5a/artifacts
 flavors:
   python_function:
     data: model.ubj
@@ -14,9 +14,9 @@ flavors:
     model_format: ubj
     xgb_version: 3.2.0
 mlflow_version: 3.11.1
-model_id: m-24251895c66945d29507295cd544f9f7
-model_size_bytes: 1282191
-model_uuid: m-24251895c66945d29507295cd544f9f7
+model_id: m-12e512e1830549fd9bf86574e9de3e5a
+model_size_bytes: 832368
+model_uuid: m-12e512e1830549fd9bf86574e9de3e5a
 prompts: null
-run_id: d31603bfbabd49cd9facdaac751d4d87
-utc_time_created: '2026-04-09 20:37:24.401812'
+run_id: a77d94a93005460c8576d36c1f1529d0
+utc_time_created: '2026-04-19 14:53:15.491231'

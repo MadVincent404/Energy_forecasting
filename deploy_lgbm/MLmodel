@@ -1,4 +1,4 @@
-artifact_path: file:///C:/Users/PC/Desktop/Projets/energies/mlruns/2/models/m-b198f6a3ed4a495eb05714164ce83d2b/artifacts
+artifact_path: file:///C:/Users/PC/Desktop/Projets/energies/mlruns/1/models/m-802ac67f08004cdaaeea61d98dd7c196/artifacts
 flavors:
   lightgbm:
     code: null
@@ -15,9 +15,9 @@ flavors:
     loader_module: mlflow.lightgbm
     python_version: 3.11.9
 mlflow_version: 3.11.1
-model_id: m-b198f6a3ed4a495eb05714164ce83d2b
-model_size_bytes: 1688148
-model_uuid: m-b198f6a3ed4a495eb05714164ce83d2b
+model_id: m-802ac67f08004cdaaeea61d98dd7c196
+model_size_bytes: 795923
+model_uuid: m-802ac67f08004cdaaeea61d98dd7c196
 prompts: null
-run_id: c8018f9f9d85460e9f4e8033c5b4827d
-utc_time_created: '2026-04-09 20:43:16.203517'
+run_id: 727dab245b954c989970fa145a884197
+utc_time_created: '2026-04-19 14:45:47.525162'
