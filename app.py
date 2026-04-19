@@ -99,7 +99,7 @@ def main():
     with open(base_dir / "params.yaml", "r") as f:
         config = yaml.safe_load(f)
 
-    testfilepath = base_dir / config["preprocessing"]["testname"]
+    testfilepath = base_dir / config["preprocessing"]["test_name"]
 
     try:
         with st.spinner('Chargement des modèles depuis MLflow...'):
