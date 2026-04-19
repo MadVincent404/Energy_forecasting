@@ -44,7 +44,7 @@ def load_test_data():
     df_raw.reset_index().to_csv(tmp_raw, index=False)
 
     perform_feature_engineering(
-        filepath=str(tmp_raw),
+        file_path=str(tmp_raw),
         trainname=str(tmp_train),
         testname=str(tmp_test),
         lags=lags,
