@@ -4,9 +4,24 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import shap
 import mlflow
+import subprocess
+import yaml
 
 
 st.set_page_config(page_title="Audit des Modèles", layout="wide")
+
+
+@st.cache_resource
+def pull_dvc_data():
+    base_dir = Path(__file__).parent
+    result = subprocess.run(
+        ["dvc", "pull", "train_data/test.csv"],
+        cwd=base_dir,
+        capture_output=True,
+        text=True
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"dvc pull échoué : {result.stderr}")
 
 @st.cache_resource 
 def load_models_and_explainers():
@@ -24,7 +39,20 @@ def load_models_and_explainers():
 
 def main():
     st.title("Audit Éducatif : XGBoost vs LightGBM")
+
+    try:
+        with st.spinner("Synchronisation DVC..."):
+            pull_dvc_data()
+    except RuntimeError as e:
+        st.error(f"Erreur DVC : {e}")
+        return
     
+    base_dir = Path(__file__).parent
+    with open(base_dir / "params.yaml", "r") as f:
+        config = yaml.safe_load(f)
+
+    testfilepath = base_dir / config["preprocessing"]["testname"]
+
     try:
         with st.spinner('Chargement des modèles depuis MLflow...'):
             model_xgb, model_lgbm, explainer_xgb, explainer_lgbm = load_models_and_explainers()
@@ -36,10 +64,10 @@ def main():
         test_file_path = Path("train_data/test.csv")
         X_data = pd.read_csv(test_file_path, sep=",")
 
-        X_data['Date'] = pd.to_datetime(X_data['Date'])
+        X_data['date'] = pd.to_datetime(X_data['date'])
         
         # On met la date en Index (XGBoost ne la verra plus)
-        X_data = X_data.set_index('Date').sort_index()
+        X_data = X_data.set_index('date').sort_index()
         
         cible = 'Pic journalier consommation (MW)'
         

@@ -1,15 +1,15 @@
 stages:
   fetch_data:
-    cmd: python src/fetch_api.py
+    cmd: python fetch_api.py
     deps:
-      - src/fetch_api.py
+      - fetch_api.py
     outs:
       - data/pic-journalier-consommation-brute.csv
-      
+
   process_data:
-    cmd: python src/process_data.py
+    cmd: python process_data.py
     deps:
-      - src/process_data.py
+      - process_data.py
       - data/pic-journalier-consommation-brute.csv
     params:
       - preprocessing.lags_jours
@@ -17,19 +17,19 @@ stages:
     outs:
       - train_data/train.csv
       - train_data/test.csv
-  
+
   train_xgb:
-    cmd: python src/train_xgb.py
+    cmd: python train_xgb.py
     deps:
       - train_data/train.csv
-      - src/train_xgb.py
+      - train_xgb.py
     params:
       - xgboost_training
-  
+
   train_lgbm:
-    cmd: python src/train_lgbm.py
+    cmd: python train_lightgbm.py
     deps:
       - train_data/train.csv
-      - src/train_lgbm.py
+      - train_lightgbm.py
     params:
       - lightgbm_training

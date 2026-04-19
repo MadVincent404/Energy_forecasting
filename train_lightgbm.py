@@ -22,9 +22,9 @@ mlflow.set_experiment("Energy_Forecasting_LGBM")
 
 print("Chargement des données avec Pandas...")
 df = pd.read_csv(train_file) 
-df['Date'] = pd.to_datetime(df['Date'])
-df = df.set_index('Date').sort_index()
-cible = 'Pic journalier consommation (MW)'
+df['date'] = pd.to_datetime(df['date'])
+df = df.set_index('date').sort_index()
+cible = 'pic_journalier_consommation'
 
 # LA FONCTION OBJECTIF OPTUNA
 def objective(trial):
@@ -113,7 +113,7 @@ if __name__ == "__main__":
         shap.summary_plot(shap_values, X_recent, show=False) 
         plt.tight_layout()
         
-        shap_path = "ligthgbm_shap_summary.png"
+        shap_path = "lightgbm_shap_summary.png"
         plt.savefig(shap_path)
         plt.close()
         

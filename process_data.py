@@ -10,9 +10,9 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def perform_feature_engineering(file_path, train_name, test_name, lags, windows):
     logging.info(f"Démarrage avec paramètres : Lags={lags} jours, Moyenne Mobile={windows} jours")
     
-    df = pd.read_csv(file_path, sep=";")
-    df["Date"] = pd.to_datetime(df["Date"], format="%Y-%m-%d")
-    df = df.set_index('Date').sort_index()
+    df = pd.read_csv(file_path, sep=",")
+    df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
+    df = df.set_index('date').sort_index()
 
     df['annee'] = df.index.year
     df['mois'] = df.index.month
@@ -23,7 +23,7 @@ def perform_feature_engineering(file_path, train_name, test_name, lags, windows)
     df['jour_annee'] = df.index.dayofyear
     df['trimestre'] = df.index.quarter
 
-    features = ["Température référence (°C)","Température moyenne (°C)", "Pic journalier consommation (MW)"]
+    features = ["pic_journalier_consommation","temperature_moyenne"]
 
     for feature in features:
         cleaned_name = feature.replace(' (°C)', '').replace(' (MW)', '').replace(' ', '_')
@@ -36,12 +36,16 @@ def perform_feature_engineering(file_path, train_name, test_name, lags, windows)
             column_name = f"{cleaned_name}_roll_{window}"
             df[column_name] = df[feature].rolling(window=window).mean().shift(1)
 
-    df = df.dropna(subset=['Pic_journalier_consommation_lag_14'])
+    max_lag = max(lags)
+    col_max_lag = f"pic_journalier_consommation_lag_{max_lag}"
+    df = df.dropna(subset=[col_max_lag])
 
     nb_datas = len(df)
     nb_tail = 90
     df.head(nb_datas- nb_tail).to_csv(train_name)
     df.tail(nb_tail).to_csv(test_name)
+
+    
 if __name__ == "__main__":
     try:
         with open("params.yaml", "r") as file:

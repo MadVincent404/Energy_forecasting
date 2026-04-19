@@ -12,19 +12,19 @@ with DAG(
     # 1. Mise à jour des données (API)
     fetch_data = BashOperator(
         task_id='fetch_energy_data',
-        bash_command='python fetch_api.py'
+        bash_command='source ~/energy_env/bin/activate && python /mnt/c/Users/PC/Desktop/Projets/energies/fetch_api.py'
     )
 
     # 2. Entraînement complet :DVC gère le preprocessing + XGBoost + LightGBM
     run_dvc_pipeline = BashOperator(
         task_id='run_dvc_repro',
-        bash_command='dvc repro'
+        bash_command='source ~/energy_env/bin/activate && cd /mnt/c/Users/PC/Desktop/Projets/energies/ && dvc repro'
     )
     
     # 3. Exportation des meilleurs modèles hors de la base MLflow
     export_models = BashOperator(
         task_id='export_best_models',
-        bash_command='python export_model.py'
+        bash_command='source ~/energy_env/bin/activate && python /mnt/c/Users/PC/Desktop/Projets/energies/export_models.py'
     )
 
     # 4. Le Push automatique vers GitHub 

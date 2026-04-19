@@ -7,6 +7,8 @@ import numpy as np
 from sklearn.model_selection import TimeSeriesSplit
 
 import shap
+import matplotlib
+matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 
 with open("params.yaml", "r") as file:
@@ -23,9 +25,9 @@ mlflow.set_experiment("Energy_Forecasting_GPU")
 df = pd.read_csv(train_file) 
 
 # Feature Engineering sur GPU
-df['Date'] = pd.to_datetime(df['Date'])
-df = df.set_index('Date').sort_index()
-cible = 'Pic journalier consommation (MW)'
+df['date'] = pd.to_datetime(df['date'])
+df = df.set_index('date').sort_index()
+cible = 'pic_journalier_consommation'
 
 
 def objective(trial):
