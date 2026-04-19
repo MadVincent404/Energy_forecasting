@@ -6,10 +6,56 @@ import shap
 import mlflow
 import subprocess
 import yaml
-
+from process_data import perform_feature_engineering
 
 st.set_page_config(page_title="Audit des Modèles", layout="wide")
+BASE_DIR = Path(__file__).parent
 
+@st.cache_data(ttl=3600)  # re-fetch max 1x par heure
+def load_test_data():
+    with open(BASE_DIR / "params.yaml", "r") as f:
+        config = yaml.safe_load(f)
+
+    lags = config["preprocessing"]["lags_jours"]
+    windows = config["preprocessing"]["fenetre_moyenne_mobile"]
+
+    # 1. Télécharger les données brutes depuis l'API publique
+    BASE_URL = "https://odre.opendatasoft.com/api/explore/v2.1/catalog/datasets/pic-journalier-consommation-brute/records"
+    limit, offset, records = 100, 0, []
+    while True:
+        r = requests.get(BASE_URL, params={"limit": limit, "offset": offset})
+        r.raise_for_status()
+        batch = r.json().get("results", [])
+        if not batch:
+            break
+        records.extend(batch)
+        offset += limit
+
+    df_raw = pd.DataFrame(records)
+    df_raw["date"] = pd.to_datetime(df_raw["date"])
+    df_raw = df_raw.set_index("date").sort_index()
+
+    # Sauvegarder temporairement pour réutiliser perform_feature_engineering
+    tmp_raw = BASE_DIR / "data_tmp_raw.csv"
+    tmp_train = BASE_DIR / "data_tmp_train.csv"
+    tmp_test = BASE_DIR / "data_tmp_test.csv"
+    df_raw.reset_index().to_csv(tmp_raw, index=False)
+
+    perform_feature_engineering(
+        filepath=str(tmp_raw),
+        trainname=str(tmp_train),
+        testname=str(tmp_test),
+        lags=lags,
+        windows=windows
+    )
+
+    df_test = pd.read_csv(tmp_test, sep=",")
+
+    # Nettoyage des fichiers temporaires
+    for f in [tmp_raw, tmp_train, tmp_test]:
+        f.unlink(missing_ok=True)
+
+    return df_test
 
 @st.cache_resource
 def pull_dvc_data():
@@ -41,10 +87,10 @@ def main():
     st.title("Audit Éducatif : XGBoost vs LightGBM")
 
     try:
-        with st.spinner("Synchronisation DVC..."):
-            pull_dvc_data()
-    except RuntimeError as e:
-        st.error(f"Erreur DVC : {e}")
+        with st.spinner("Récupération des données depuis l'API OpenDataSoft..."):
+            X_data = load_test_data()
+    except Exception as e:
+        st.error(f"Erreur de chargement des données : {e}")
         return
     
     base_dir = Path(__file__).parent
