@@ -41,7 +41,7 @@ def main():
         # On met la date en Index (XGBoost ne la verra plus)
         X_data = X_data.set_index('date').sort_index()
         
-        cible = 'Pic journalier consommation (MW)'
+        cible = 'pic_journalier_consommation'
         
         # On sauvegarde les vraies valeurs pour le graphique
         y_true = X_data[cible] 
@@ -60,7 +60,7 @@ def main():
     preds_lgbm_90 = model_lgbm.predict(X_data)
 
     df_graph = pd.DataFrame({
-        "Valeur RÃ©elle": y_true,
+        "Valeur Réelle": y_true,
         "XGBoost": preds_xgb_90,
         "LightGBM": preds_lgbm_90
     }, index=X_data.index)
