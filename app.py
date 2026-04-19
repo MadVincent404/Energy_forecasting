@@ -6,6 +6,8 @@ import shap
 import mlflow
 import subprocess
 import yaml
+import requests
+
 from process_data import perform_feature_engineering
 
 st.set_page_config(page_title="Audit des Modèles", layout="wide")
