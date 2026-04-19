@@ -23,7 +23,7 @@ def load_models_and_explainers():
 
 
 def main():
-    st.title("Audit Ã‰ducatif : XGBoost vs LightGBM")
+    st.title("Audit Educatif : XGBoost vs LightGBM")
     
     try:
         with st.spinner('Chargement des Modèles depuis MLflow...'):
