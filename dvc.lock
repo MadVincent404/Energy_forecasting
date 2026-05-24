@@ -17,12 +17,12 @@ stages:
     deps:
     - path: data/pic-journalier-consommation-brute.csv
       hash: md5
-      md5: c5f8ba2f9c0aa7affabb98a39c0d17f6
-      size: 151382
+      md5: ea4d5dbab5992eefdde183bccce72ffc
+      size: 153163
     - path: process_data.py
       hash: md5
-      md5: 3a41b5d6a9d7a2df47de1225afaa9ecb
-      size: 2652
+      md5: 18a614b518a0e463250238b780eaa929
+      size: 2900
     params:
       params.yaml:
         preprocessing.fenetre_moyenne_mobile:
@@ -43,19 +43,19 @@ stages:
     outs:
     - path: train_data/test.csv
       hash: md5
-      md5: 79b14de033b61f8ff0ebf9dd9c81e1de
-      size: 25230
+      md5: bad322919c8279726fbf7e9d3f19375f
+      size: 34193
     - path: train_data/train.csv
       hash: md5
-      md5: 1b6541742d7f11ed81974c2c19fcc9f0
-      size: 1404395
+      md5: 84e22b0aacad89877006e7da663f920b
+      size: 1898524
   train_lgbm:
     cmd: python train_lightgbm.py
     deps:
     - path: train_data/train.csv
       hash: md5
-      md5: 1b6541742d7f11ed81974c2c19fcc9f0
-      size: 1404395
+      md5: 84e22b0aacad89877006e7da663f920b
+      size: 1898524
     - path: train_lightgbm.py
       hash: md5
       md5: 5bac57f3f4449c2f1e0a48fd2e426c30
@@ -84,3 +84,38 @@ stages:
             min_child_samples:
               min: 10
               max: 100
+  train_xgb:
+    cmd: python train_xgb.py
+    deps:
+    - path: train_data/train.csv
+      hash: md5
+      md5: 84e22b0aacad89877006e7da663f920b
+      size: 1898524
+    - path: train_xgb.py
+      hash: md5
+      md5: 5d77328cd69bd3430df59bd761c103a3
+      size: 4734
+    params:
+      params.yaml:
+        xgboost_training:
+          objective: reg:squarederror
+          tree_method: hist
+          device: cuda
+          early_stopping_rounds: 50
+          n_estimators: 2000
+          search_space:
+            learning_rate:
+              min: 0.005
+              max: 0.1
+            max_depth:
+              min: 3
+              max: 12
+            subsample:
+              min: 0.5
+              max: 1.0
+            colsample_bytree:
+              min: 0.5
+              max: 1.0
+            min_child_weight:
+              min: 1
+              max: 10

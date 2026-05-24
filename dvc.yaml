@@ -1,11 +1,4 @@
 stages:
-  fetch_data:
-    cmd: python fetch_api.py
-    deps:
-      - fetch_api.py
-    outs:
-      - data/pic-journalier-consommation-brute.csv
-
   process_data:
     cmd: python process_data.py
     deps:
