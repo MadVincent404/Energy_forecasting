@@ -17,8 +17,8 @@ stages:
     deps:
     - path: data/pic-journalier-consommation-brute.csv
       hash: md5
-      md5: ea4d5dbab5992eefdde183bccce72ffc
-      size: 153163
+      md5: eb63d01a2719470e1e26aaea58e3e54a
+      size: 154092
     - path: process_data.py
       hash: md5
       md5: 18a614b518a0e463250238b780eaa929
@@ -43,19 +43,19 @@ stages:
     outs:
     - path: train_data/test.csv
       hash: md5
-      md5: bad322919c8279726fbf7e9d3f19375f
-      size: 34193
+      md5: 7f7a37b7ecccf6f20d62c472e7e2dba4
+      size: 34768
     - path: train_data/train.csv
       hash: md5
-      md5: 84e22b0aacad89877006e7da663f920b
-      size: 1898524
+      md5: bcbb484202258df8a902162ef1d37a28
+      size: 1909720
   train_lgbm:
     cmd: python train_lightgbm.py
     deps:
     - path: train_data/train.csv
       hash: md5
-      md5: 84e22b0aacad89877006e7da663f920b
-      size: 1898524
+      md5: bcbb484202258df8a902162ef1d37a28
+      size: 1909720
     - path: train_lightgbm.py
       hash: md5
       md5: 5bac57f3f4449c2f1e0a48fd2e426c30
@@ -89,8 +89,8 @@ stages:
     deps:
     - path: train_data/train.csv
       hash: md5
-      md5: 84e22b0aacad89877006e7da663f920b
-      size: 1898524
+      md5: bcbb484202258df8a902162ef1d37a28
+      size: 1909720
     - path: train_xgb.py
       hash: md5
       md5: 5d77328cd69bd3430df59bd761c103a3
